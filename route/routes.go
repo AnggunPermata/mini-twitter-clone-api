@@ -10,5 +10,5 @@ func New(e *echo.Echo) {
 	e.POST("users/signup", controller.Signup)
 
 	//User Login
-	// e.POST("users/login", controller.Login)
+	e.POST("users/login", controller.UserLogin)
 }

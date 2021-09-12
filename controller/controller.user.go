@@ -23,6 +23,7 @@ func Signup(c echo.Context) error {
 			})
 		}
 	}
+
 	newUser := models.User{}
 	newUser.Username = userData.Username
 	newUser.Email = userData.Email
@@ -49,4 +50,32 @@ func Signup(c echo.Context) error {
 		"data":    showUserData,
 	})
 
+}
+
+func UserLogin(c echo.Context) error {
+	inputData := models.User{}
+	c.Bind(&inputData)
+	userData := models.User{
+		Email:    inputData.Email,
+		Password: inputData.Password,
+	}
+	c.Bind(&userData)
+
+	user, err := database.UserLogin(userData.Email, userData.Password)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": "please check your email and password again.",
+		})
+	}
+
+	showUserData := map[string]interface{}{
+		"ID":        user.ID,
+		"Full Name": user.FullName,
+		"Username":  "@" + user.Username,
+		"Token":     user.Token,
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message":   "Hello, Let's Start!",
+		"user-data": showUserData,
+	})
 }
