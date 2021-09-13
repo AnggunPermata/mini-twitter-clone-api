@@ -12,5 +12,6 @@ type User struct {
 	TweetID    uint
 	FollowerID uint
 	FollowID   uint
+	Role       string `json:"role" form:"role"`
 	Token      string
 }

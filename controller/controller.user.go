@@ -4,24 +4,34 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/AnggunPermata/mini-twitter-clone-api/auth"
 	"github.com/AnggunPermata/mini-twitter-clone-api/database"
 	"github.com/AnggunPermata/mini-twitter-clone-api/models"
 	"github.com/labstack/echo"
 )
 
+//To check user's authorization by using user Id
+
+func AuthorizedUser(c echo.Context) bool {
+	_, role := auth.ExtractTokenUserId(c)
+	if role != "user" {
+		return false
+	}
+	return true
+}
+
 func Signup(c echo.Context) error {
 	userData := models.User{}
 	c.Bind(&userData)
-	if len(userData.Username) < 4 || len(userData.Email) < 4 || strings.Contains(userData.Email, ".com") || len(userData.Password) < 6 || len(userData.Gender) > 1 {
-		if userData.Gender != "F" && userData.Gender != "M" {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"message": "Please follow the rules to Sign up:",
-				"rules-1": "Make sure the username has more than 3 characters.",
-				"rules-2": "Make sure the email has more than 3 characters, and it is a real email.",
-				"rules-3": "Make sure the Password has more than 5 characters.",
-				"rules-4": "Gender only have one character, which is F for female or M for male",
-			})
-		}
+	if len(userData.Username) < 4 || len(userData.Email) < 4 || strings.Contains(userData.Email, ".com") || len(userData.Password) < 6 || len(userData.Gender) > 1 || (userData.Gender != "F" && userData.Gender != "M") {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "Please follow the rules to Sign up:",
+			"rules-1": "Make sure the username has more than 3 characters.",
+			"rules-2": "Make sure the email has more than 3 characters, and it is a real email.",
+			"rules-3": "Make sure the Password has more than 5 characters.",
+			"rules-4": "Gender only have one character, which is F for female or M for male",
+		})
+
 	}
 
 	newUser := models.User{}
