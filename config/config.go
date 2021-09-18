@@ -1,6 +1,9 @@
 package config
 
 import (
+	"strconv"
+
+	"github.com/AnggunPermata/mini-twitter-clone-api/constant"
 	"github.com/AnggunPermata/mini-twitter-clone-api/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -11,7 +14,7 @@ var DB *gorm.DB
 var PORT int
 
 func InitDB() {
-	connectionString := "root:Teacup21@tcp(localhost:3306)/mini-twitter-api?charset=utf8&parseTime=True&loc=Local"
+	connectionString := constant.Configuration["ConnectionString"]
 	var err error
 	DB, err = gorm.Open(mysql.Open(connectionString), &gorm.Config{})
 	if err != nil {
@@ -22,7 +25,7 @@ func InitDB() {
 }
 
 func InitPort() {
-	PORT = 8080
+	PORT, _ = strconv.Atoi(constant.Configuration["PORT"])
 }
 
 func InitMigrate() {
