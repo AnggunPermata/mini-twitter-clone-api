@@ -11,3 +11,11 @@ func CreateNewTweet(tweet models.Tweet) (models.Tweet, error) {
 	}
 	return tweet, nil
 }
+
+func GetOneTweeetForTimeline(userId int) ([]models.Tweet, error) {
+	var tweet []models.Tweet
+	if err := config.DB.Find(&tweet, "user_id=?", userId).Error; err != nil {
+		return tweet, err
+	}
+	return tweet, nil
+}

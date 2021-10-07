@@ -37,3 +37,11 @@ func GetOneUserById(userId int) (models.User, error) {
 	}
 	return user, nil
 }
+
+func GetOneUserByIdForTimeline(userId int) ([]models.User, error) {
+	var user []models.User
+	if err := config.DB.Find(&user, "id=?", userId).Error; err != nil {
+		return user, err
+	}
+	return user, nil
+}

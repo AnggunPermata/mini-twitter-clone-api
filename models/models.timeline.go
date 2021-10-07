@@ -10,3 +10,7 @@ type Timeline struct {
 	TweetID   uint
 	CommentID uint
 }
+
+type InputTimeline struct {
+	UserID uint `json:"user-id" form:"user-id"` //the current user accout
+}
